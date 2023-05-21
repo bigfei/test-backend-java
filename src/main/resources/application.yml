@@ -1,0 +1,17 @@
+# Web
+server:
+  servlet:
+    context-path: /api
+
+# MongoDB
+spring:
+  data:
+    mongodb:
+      #      uri: ${MONGODB_DATABASE_URL:mongodb://appuser:appuser@ubs.lan.bigfei.me:27017/appdb}
+      host: ubs.lan.bigfei.me
+      port: 27017
+      username: appuser
+      password: appuser
+      authentication-database: appdb
+      database: appdb
+      auto-index-creation: true
