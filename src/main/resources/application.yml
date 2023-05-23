@@ -1,13 +1,21 @@
-# Web
-server:
-  servlet:
-    context-path: /api
+com:
+  auth0:
+    managementApi:
+      clientId: FSVJ1U7gTdsh12TN805mzGUO7NDUkHa3
+      clientSecret: N0igt8yp29yQKUCp__R80xhiM533oudmL-BqtmyPoiROluUgkt_2kjdBocklphls
+      grantType: client_credentials
+
+okta:
+  oauth2:
+    issuer: https://dev-wc-1.jp.auth0.com/
+    clientId: 7GH8oauy7bbsR6Dcd6zhHTbDNN9oqoqp
+    clientSecret: GZY__6pxqrK_TBpXOhFvHhJCABWIsof60MZWEGopbH3rYkbBzCOZTKP_ONztTsWO
 
 # MongoDB
 spring:
   data:
     mongodb:
-      #      uri: ${MONGODB_DATABASE_URL:mongodb://appuser:appuser@ubs.lan.bigfei.me:27017/appdb}
+      #uri: ${MONGODB_DATABASE_URL:mongodb://appuser:appuser@ubs.lan.bigfei.me:27017/appdb}
       host: ubs.lan.bigfei.me
       port: 27017
       username: appuser

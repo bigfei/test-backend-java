@@ -18,9 +18,10 @@ import org.springframework.data.mongodb.core.query.Query;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class UserRepositoryTest {
@@ -42,6 +43,16 @@ public class UserRepositoryTest {
         mongoTemplate.bulkOps(BulkMode.UNORDERED, User.class, COL_NAME).remove(new Query()).execute();
         List<User> users = Arrays.asList(mapper.readValue(new ClassPathResource(DATA_PATH).getFile(), User[].class));
         mongoTemplate.bulkOps(BulkMode.UNORDERED, User.class, COL_NAME).insert(users).execute();
+    }
+
+    @DisplayName("Check that the users can be created.")
+    @Test
+    public void testCreateUser() {
+        User user = new User("Tom", LocalDate.parse("1992-12-01"), "ADDR1", "T1");
+        User u = userRepository.save(user);
+
+        assertEquals(user.getDob(), LocalDate.parse("1992-12-01"));
+        assertNotNull(u.getId());
     }
 
     @DisplayName("Check that the users is retrieved by user name.")
@@ -66,5 +77,28 @@ public class UserRepositoryTest {
         String id = u.getId();
         User delUser = userRepository.deleteByName(u.getName());
         assertEquals(id, delUser.getId());
+    }
+
+    @DisplayName("Check that the user can be updated by its id")
+    @Test
+    public void testUpdateByUserId() {
+        Pageable paging = PageRequest.of(0, 10);
+        Page<User> actual = userRepository.findByName("David Johnson", paging);
+        assertEquals(1, actual.getTotalElements());
+
+        String id  = actual.getContent().get(0).getId();
+        Optional<User> user = userRepository.findById(id);
+        assertTrue(user.isPresent());
+
+        User u = user.get();
+        assertEquals(id, u.getId());
+
+        u.setDescription("T1");
+        userRepository.save(u);
+        user = userRepository.findById(id);
+        assertTrue(user.isPresent());
+        u = user.get();
+        assertEquals(id, u.getId());
+        assertEquals("T1", u.getDescription());
     }
 }

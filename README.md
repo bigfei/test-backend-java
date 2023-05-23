@@ -4,20 +4,22 @@
 It is a simple LBS service that offers nearby searches, following/followers lists, and profile updates, according to the [Requirement](docs/REQ.md).
 
 
-## Quick Start
-
+## Quick Start and Demos
+### Prerequisite
+1. MongoDB setup using docker-compose
+2. 
 
 
 ## Under the hood
 ### Tech Stack
-- **MongoDB** Use mongodb as the DB for faster searches and [geospatial](https://www.mongodb.com/docs/manual/reference/operator/aggregation/geoNear/) functions, [de.flapdoodle.embed.mongo](https://github.com/flapdoodle-oss/de.flapdoodle.embed.mongo.spring/tree/spring-3.0.x) for unit testing under SpringBoot framework.
-- Springboot/Framework as the de factro for Java world to build any restful things.
-- jWT and Auth0 as the oauth2 provider for prototype building for MVP.
-- Github Actions are used for CI solution.
-- Cloudflare Tunnel for free https services.
-- Docker for quicker deployment.
-- Thymeleaf adds support for Server-Side View Rendering.
-- Sentry for logging APM.
+- **MongoDB** Use mongodb as the DB for faster searches and [geospatial](https://www.mongodb.com/docs/manual/reference/operator/aggregation/geoNear/) functions.
+- **Springboot Framework** as the de factro for Java world to build any restful api things.
+- Use jWT and **Auth0** as the oauth2 provider for prototype building and MVP.
+- **Github Actions** are used for CI solution.
+- Cloudflare Tunnel for free https access and CDN services.
+- Docker for deployment and testing.
+- **Thymeleaf** adds support for Server-Side View Rendering.
+- **Sentry** for logging APM.
 
 
 
@@ -32,7 +34,6 @@ It is a simple LBS service that offers nearby searches, following/followers list
 
 ### Near me
 
-## Demo
 
 
 ## Tips and Caveats

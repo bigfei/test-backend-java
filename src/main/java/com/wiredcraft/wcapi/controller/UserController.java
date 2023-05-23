@@ -1,7 +1,6 @@
 package com.wiredcraft.wcapi.controller;
 
 import com.wiredcraft.wcapi.model.User;
-import com.wiredcraft.wcapi.repos.UserRepository;
 import com.wiredcraft.wcapi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -9,10 +8,15 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -44,10 +48,19 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUsererById(@PathVariable String id) {
+    public ResponseEntity<User> getUserById(@PathVariable String id) {
         return userService.getUserById(id)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<?> getUser(@AuthenticationPrincipal OAuth2User user) {
+        if (user == null) {
+            return new ResponseEntity<>("", HttpStatus.OK);
+        } else {
+            return ResponseEntity.ok().body(user.getAttributes());
+        }
     }
 
     @PutMapping("{id}")
@@ -69,6 +82,12 @@ public class UserController {
                     return ResponseEntity.ok(user);
                 })
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/profile")
+    @PreAuthorize("hasAuthority('SCOPE_profile')")
+    public ModelAndView userDetails(OAuth2AuthenticationToken authentication) {
+        return new ModelAndView("profile" , Collections.singletonMap("details", authentication.getPrincipal().getAttributes()));
     }
 
 }
