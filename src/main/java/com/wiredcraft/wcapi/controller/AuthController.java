@@ -2,12 +2,14 @@ package com.wiredcraft.wcapi.controller;
 
 import com.wiredcraft.wcapi.config.SecurityConfig;
 
+import com.wiredcraft.wcapi.service.UserService;
 import net.minidev.json.JSONObject;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.client.RestTemplate;
@@ -19,13 +21,19 @@ public class AuthController {
     private final SecurityConfig config;
     private final ClientRegistration registration;
 
-    public AuthController(ClientRegistrationRepository registrations, SecurityConfig config) {
+    private UserService userService;
+
+    public AuthController(ClientRegistrationRepository registrations, SecurityConfig config, UserService userService) {
         this.registration = registrations.findByRegistrationId("okta");
         this.config = config;
+        this.userService = userService;
     }
 
     @GetMapping("/")
-    public String home() {
+    public String home(@AuthenticationPrincipal OAuth2User user) {
+        if (user != null) {
+            userService.syncAuth0User(user);
+        }
         return "home";
     }
 

@@ -15,7 +15,7 @@
     </div>
 
     <div sec:authorize="isAuthenticated()" class="text container">
-        <p>Welcome home, <span sec:authentication="principal.attributes['name']"></span>!</p>
+        <p>Welcome home, <span sec:authentication="principal.attributes"></span>!</p>
         <img width="80" th:src="${#authentication.principal.attributes['picture']}" alt="User Avatar" />
         <p>Visit the <a th:href="@{/users/profile}">My Profile</a> page in this application to view the information retrieved with your OAuth Access Token.</p>
     </div>

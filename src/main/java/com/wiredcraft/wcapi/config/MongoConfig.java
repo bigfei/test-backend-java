@@ -19,10 +19,10 @@ import java.util.Optional;
 @EnableMongoAuditing(dateTimeProviderRef = "auditingDateTimeProvider")
 public class MongoConfig {
 
-    @Bean
-    public MongoTransactionManager transactionManager(final MongoDatabaseFactory databaseFactory) {
-        return new MongoTransactionManager(databaseFactory);
-    }
+//    @Bean
+//    public MongoTransactionManager transactionManager(final MongoDatabaseFactory databaseFactory) {
+//        return new MongoTransactionManager(databaseFactory);
+//    }
 
     @Bean
     public ValidatingMongoEventListener validatingMongoEventListener(final LocalValidatorFactoryBean factory) {

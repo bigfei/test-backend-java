@@ -3,6 +3,7 @@ package com.wiredcraft.wcapi.service;
 import com.wiredcraft.wcapi.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.Optional;
 
@@ -16,4 +17,6 @@ public interface UserService {
     User updateUser(User user);
 
     void deleteUser(String userId);
+
+    void syncAuth0User(OAuth2User user);
 }

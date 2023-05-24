@@ -1,11 +1,11 @@
 package com.wiredcraft.wcapi.exception;
 
-public class UserRegistrationException extends RuntimeException {
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ResponseStatus(HttpStatus.BAD_REQUEST)
+public class UserRegistrationException extends RuntimeException{
     public UserRegistrationException(String s) {
         super(s);
-    }
-
-    public UserRegistrationException(String message, Throwable cause) {
-        super(message, cause);
     }
 }
