@@ -148,7 +148,7 @@ public class UserController {
     @GetMapping("{id}/nearFriends")
     public ResponseEntity<List<User>> nearFriends(@PathVariable("id") String userId,
                                                   @RequestParam(defaultValue = "10") int distanceKm) {
-        Distance distance = new Distance(100, Metrics.KILOMETERS);
+        Distance distance = new Distance(distanceKm, Metrics.KILOMETERS);
 
         Optional<User> user = userService.getUserById(userId);
         if (user.isPresent()) {
