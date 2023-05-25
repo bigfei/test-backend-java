@@ -20,4 +20,3 @@ public interface FollowRepository extends MongoRepository<Follow, String> {
             "]}")
     List<Follow> friendFollows(String userId0, String userId1);
 }
-//{ followee: { $ref: "users", $id: ObjectId("646f41d237aca45002d21d58") } }

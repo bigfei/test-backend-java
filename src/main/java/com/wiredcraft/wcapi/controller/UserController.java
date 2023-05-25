@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.geo.Distance;
+import org.springframework.data.geo.Metrics;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -141,5 +143,19 @@ public class UserController {
             }
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("{id}/nearFriends")
+    public ResponseEntity<List<User>> nearFriends(@PathVariable("id") String userId,
+                                                  @RequestParam(defaultValue = "10") int distanceKm) {
+        Distance distance = new Distance(100, Metrics.KILOMETERS);
+
+        Optional<User> user = userService.getUserById(userId);
+        if (user.isPresent()) {
+            List<User> friends = userService.findByNearFriends(user.get(), distance);
+            return new ResponseEntity<>(friends, HttpStatus.OK);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

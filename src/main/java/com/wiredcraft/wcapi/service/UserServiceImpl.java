@@ -1,15 +1,23 @@
 package com.wiredcraft.wcapi.service;
 
 import com.wiredcraft.wcapi.exception.UserRegistrationException;
+import com.wiredcraft.wcapi.model.Address;
+import com.wiredcraft.wcapi.model.Follow;
 import com.wiredcraft.wcapi.model.User;
+import com.wiredcraft.wcapi.repos.FollowRepository;
 import com.wiredcraft.wcapi.repos.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.geo.Distance;
+import org.springframework.data.geo.Metrics;
+import org.springframework.data.geo.Point;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -17,15 +25,18 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    private FollowRepository followRepository;
+
+    public UserServiceImpl(UserRepository userRepository, FollowRepository followRepository) {
         this.userRepository = userRepository;
+        this.followRepository = followRepository;
     }
 
     @Override
     public User createUser(User user) {
         Optional<User> userOptional = userRepository.findByName(user.getName());
-        if(userOptional.isPresent()) {
-            throw new UserRegistrationException("User with name "+ user.getName()+" already exists");
+        if (userOptional.isPresent()) {
+            throw new UserRegistrationException("User with name " + user.getName() + " already exists");
         }
         return userRepository.save(user);
     }
@@ -57,17 +68,29 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void syncAuth0User(OAuth2User user) {
-        String name = (String)user.getAttributes().get("name");
+        String name = (String) user.getAttributes().get("name");
         Optional<User> userOptional = userRepository.findByName(user.getName());
-        if(userOptional.isPresent()) {
+        if (userOptional.isPresent()) {
             //syncUser from auth0
             User localUser = userOptional.get();
-            localUser.setDescription((String)user.getAttributes().get("sub"));
+            localUser.setDescription((String) user.getAttributes().get("sub"));
             userRepository.save(localUser);
-        }else{
+        } else {
             //createUser from auth0 into localdb
-            User u = new User(name, LocalDate.now(), "Addr1", (String)user.getAttributes().get("sub"));
+            User u = new User(name, LocalDate.now(), new Address(), (String) user.getAttributes().get("sub"));
             userRepository.save(u);
         }
+    }
+
+    public List<User> findByNearFriends(User user, Distance distance) {
+        List<User> users = new ArrayList<>();
+        List<User> nearUsers = userRepository.findByAddress_LocationNear(user.getAddress().getLocation(), distance);
+        for (User nearUser : nearUsers) {
+            List<Follow> fs = followRepository.friendFollows(user.getId(), nearUser.getId());
+            if (fs.size() == 2) { // they are followed each other
+                users.add(nearUser);
+            }
+        }
+        return users;
     }
 }

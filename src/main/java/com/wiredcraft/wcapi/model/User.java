@@ -22,7 +22,7 @@ public class User {
     @Indexed(unique = true)
     private String name;
     private LocalDate dob;
-    private String address;
+    private Address address;
     private String description;
 
     @CreatedDate
@@ -32,11 +32,11 @@ public class User {
     public User() {
     }
 
-    public User(String name, LocalDate dob, String address, String description) {
+    public User(String name, LocalDate dob, Address address, String description) {
         this(name, dob, address, description, LocalDateTime.now());
     }
 
-    public User(String name, LocalDate dob, String address, String description, LocalDateTime createdAt) {
+    public User(String name, LocalDate dob, Address address, String description, LocalDateTime createdAt) {
         this.name = name;
         this.dob = dob;
         this.address = address;
@@ -68,11 +68,11 @@ public class User {
         this.dob = dob;
     }
 
-    public String getAddress() {
+    public Address getAddress() {
         return address;
     }
 
-    public void setAddress(String address) {
+    public void setAddress(Address address) {
         this.address = address;
     }
 

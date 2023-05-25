@@ -2,6 +2,7 @@ package com.wiredcraft.wcapi.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wiredcraft.wcapi.exception.UserRegistrationException;
+import com.wiredcraft.wcapi.model.Address;
 import com.wiredcraft.wcapi.model.User;
 import com.wiredcraft.wcapi.service.FollowService;
 import com.wiredcraft.wcapi.service.UserService;
@@ -59,9 +60,9 @@ public class UserControllerTest {
     @BeforeEach
     void setUp() {
         this.userList = new ArrayList<>();
-        this.userList.add(new User("Tom", LocalDate.now(), "ADDR1", "T1"));
-        this.userList.add(new User("Jack", LocalDate.now(), "ADDR2", "T2"));
-        this.userList.add(new User("Peter", LocalDate.now(), "ADDR3", "T3"));
+        this.userList.add(new User("Tom", LocalDate.now(), new Address("ADDR1"), "T1"));
+        this.userList.add(new User("Jack", LocalDate.now(), new Address("ADDR2"), "T2"));
+        this.userList.add(new User("Peter", LocalDate.now(), new Address("ADDR3"), "T3"));
     }
 
     @Test
@@ -77,7 +78,7 @@ public class UserControllerTest {
     @Test
     void shouldFetchOneUserById() throws Exception {
         final String userId = "11a";
-        final User user = new User("Tom", LocalDate.now(), "ADDR1", "T1");
+        final User user = new User("Tom", LocalDate.now(), new Address("ADDR1"), "T1");
 
         given(userService.getUserById(userId)).willReturn(Optional.of(user));
 
@@ -96,10 +97,10 @@ public class UserControllerTest {
     void shouldCreateNewUser() throws Exception {
         given(userService.createUser(any(User.class))).willAnswer((invocation) -> invocation.getArgument(0));
 
-        final User user = new User("Tom", LocalDate.now(), "ADDR1", "T1");
+        final User user = new User("Tom", LocalDate.now(), new Address("ADDR1"), "T1");
 
         this.mockMvc.perform(post("/users")
-                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(user)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name", is(user.getName())))
@@ -109,10 +110,10 @@ public class UserControllerTest {
     @Test
     void shouldReturn400WhenCreateNewUserWithoutEmail() throws Exception {
         given(userService.createUser(any(User.class))).willThrow(new UserRegistrationException("Jane Smith"));
-        final User user = new User("Jane Smith", LocalDate.now(), "ADDR1", "T1");
+        final User user = new User("Jane Smith", LocalDate.now(), new Address("ADDR1"), "T1");
 
         this.mockMvc.perform(post("/users")
-                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(user)))
                 .andExpect(status().isBadRequest())
                 .andExpect(res -> assertTrue(res.getResolvedException() instanceof UserRegistrationException))
@@ -122,13 +123,13 @@ public class UserControllerTest {
     @Test
     void shouldUpdateUser() throws Exception {
         String userId = "11a";
-        final User user = new User("Tom", LocalDate.now(), "ADDR1", "T1");
+        final User user = new User("Tom", LocalDate.now(), new Address("ADDR1"), "T1");
         user.setId(userId);
         given(userService.getUserById(userId)).willReturn(Optional.of(user));
         given(userService.updateUser(any(User.class))).willAnswer((invocation) -> invocation.getArgument(0));
 
         this.mockMvc.perform(put("/users/{id}", userId)
-                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(user)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", is(user.getName())));
@@ -138,10 +139,10 @@ public class UserControllerTest {
     void shouldReturn404WhenUpdatingNonExistingUser() throws Exception {
         String userId = "11a";
         given(userService.getUserById(userId)).willReturn(Optional.empty());
-        final User user = new User("Tom", LocalDate.now(), "ADDR1", "T1");
+        final User user = new User("Tom", LocalDate.now(), new Address("ADDR1"), "T1");
 
         this.mockMvc.perform(put("/users/{id}", userId)
-                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(user)))
                 .andExpect(status().isNotFound());
     }
@@ -149,7 +150,7 @@ public class UserControllerTest {
     @Test
     void shouldDeleteUser() throws Exception {
         String userId = "11a";
-        final User user = new User("Tom", LocalDate.now(), "ADDR1", "T1");
+        final User user = new User("Tom", LocalDate.now(), new Address("ADDR1"), "T1");
         user.setId(userId);
         given(userService.getUserById(userId)).willReturn(Optional.of(user));
         doNothing().when(userService).deleteUser(user.getId());

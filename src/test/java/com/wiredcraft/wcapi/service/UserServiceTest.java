@@ -1,6 +1,7 @@
 package com.wiredcraft.wcapi.service;
 
 import com.wiredcraft.wcapi.exception.UserRegistrationException;
+import com.wiredcraft.wcapi.model.Address;
 import com.wiredcraft.wcapi.model.User;
 import com.wiredcraft.wcapi.repos.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -54,7 +55,7 @@ public class UserServiceTest {
 
     @Test
     void shouldThrowErrorWhenSaveUserWithExistingName() {
-        final User user = new User("Tom", LocalDate.now(), "ADDR1", "T1");
+        final User user = new User("Tom", LocalDate.now(), new Address("ADDR1"), "T1");
         given(userRepository.findByName(user.getName())).willReturn(Optional.of(user));
         assertThrows(UserRegistrationException.class, () -> {
             userService.createUser(user);
@@ -64,7 +65,7 @@ public class UserServiceTest {
 
     @Test
     void shouldUpdateUser() {
-        final User user = new User("Tom", LocalDate.now(), "ADDR1", "T1");
+        final User user = new User("Tom", LocalDate.now(), new Address("ADDR1"), "T1");
         user.setId("111a");
         given(userRepository.findById(user.getId())).willReturn(Optional.of(user));
         given(userRepository.save(user)).willReturn(user);
@@ -76,9 +77,9 @@ public class UserServiceTest {
     @Test
     void shouldReturnFindAll() {
         List<User> users = new ArrayList<>();
-        users.add(new User("Tom", LocalDate.now(), "ADDR1", "T1"));
-        users.add(new User("James", LocalDate.now(), "ADDR2", "T2"));
-        users.add(new User("Lisa", LocalDate.now(), "ADDR3", "T3"));
+        users.add(new User("Tom", LocalDate.now(), new Address("ADDR1"), "T1"));
+        users.add(new User("James", LocalDate.now(), new Address("ADDR2"), "T2"));
+        users.add(new User("Lisa", LocalDate.now(), new Address("ADDR3"), "T3"));
 
         Pageable paging = PageRequest.of(0, 10);
         Page<User> expected = new PageImpl<>(users);
@@ -93,7 +94,7 @@ public class UserServiceTest {
     @Test
     void findUserById() {
         String id = "1a";
-        final User user = new User("Tom", LocalDate.now(), "ADDR1", "T1");
+        final User user = new User("Tom", LocalDate.now(), new Address("ADDR1"), "T1");
 
         given(userRepository.findById(id)).willReturn(Optional.of(user));
 

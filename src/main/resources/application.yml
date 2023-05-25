@@ -23,7 +23,7 @@ spring:
       authentication-database: appdb
       database: appdb
       auto-index-creation: true
-#
+
 #logging:
 #  level:
 #    org.mongodb.driver: DEBUG

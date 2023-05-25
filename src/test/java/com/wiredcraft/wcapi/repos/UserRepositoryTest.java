@@ -1,6 +1,7 @@
 package com.wiredcraft.wcapi.repos;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wiredcraft.wcapi.model.Address;
 import com.wiredcraft.wcapi.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -11,6 +12,8 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.geo.Distance;
+import org.springframework.data.geo.Metrics;
 import org.springframework.data.mongodb.core.BulkOperations.BulkMode;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
@@ -49,7 +52,7 @@ public class UserRepositoryTest {
     @DisplayName("Check that the users can be created.")
     @Test
     public void testCreateUser() {
-        User user = new User("Tom", LocalDate.parse("1992-12-01"), "ADDR1", "T1");
+        User user = new User("Tom", LocalDate.parse("1992-12-01"), new Address("ADDR1"), "T1");
         User u = userRepository.save(user);
 
         assertEquals(user.getDob(), LocalDate.parse("1992-12-01"));
@@ -101,5 +104,22 @@ public class UserRepositoryTest {
         u = user.get();
         assertEquals(id, u.getId());
         assertEquals("T1", u.getDescription());
+    }
+
+    @DisplayName("Check that the User location near 10km / 100km.")
+    @Test
+    public void testFindByAddress_LocationNear() {
+        Pageable paging = PageRequest.of(0, 10);
+        Page<User> actual = userRepository.findByName("David Johnson", paging);
+        assertEquals(1, actual.getTotalElements());
+
+        User u = actual.getContent().get(0);
+        Distance distance = new Distance(100, Metrics.KILOMETERS);
+        List<User> us = userRepository.findByAddress_LocationNear(u.getAddress().getLocation(), distance);
+        assertEquals(10, us.size());
+
+        Distance distance2 = new Distance(10, Metrics.KILOMETERS);
+        List<User> us2 = userRepository.findByAddress_LocationNear(u.getAddress().getLocation(), distance2);
+        assertTrue(us2.size()<10);
     }
 }
