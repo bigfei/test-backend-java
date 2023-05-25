@@ -24,16 +24,19 @@ It is a simple LBS service that offers nearby searches, following/followers list
 
 
 ## System design and User Stories
-
+ 
 
 ### User API
+/users
 
 ### OAuth2
+Use auth0.com as the backend oauth provider.
 
 ### Followers/Friend List
+Add a mongodb collection as the follower.
 
 ### Near me
-
+Use mongodb geospatial search to do geo search around a specific geo points (aka geocaches). 
 
 
 ## Tips and Caveats

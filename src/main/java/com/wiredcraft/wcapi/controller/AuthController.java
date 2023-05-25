@@ -1,10 +1,9 @@
 package com.wiredcraft.wcapi.controller;
 
 import com.wiredcraft.wcapi.config.SecurityConfig;
-
 import com.wiredcraft.wcapi.service.UserService;
 import net.minidev.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
@@ -47,7 +46,13 @@ public class AuthController {
         requestBody.put("grant_type", "client_credentials");
         HttpEntity<String> request = new HttpEntity<String>(requestBody.toString(), headers);
         RestTemplate restTemplate = new RestTemplate();
-        HashMap<String, String> result = restTemplate.postForObject("https://dev-wc-1.jp.auth0.com/oauth/token", request, HashMap.class);
+        ResponseEntity<HashMap<String, String>> response = restTemplate.exchange(
+                "https://dev-wc-1.jp.auth0.com/oauth/token",
+                HttpMethod.POST,
+                request,
+                new ParameterizedTypeReference<HashMap<String, String>>() {}
+        );
+        HashMap<String, String> result = response.getBody();
 
         return result.get("access_token");
     }

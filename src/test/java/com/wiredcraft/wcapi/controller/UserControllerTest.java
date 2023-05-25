@@ -3,11 +3,11 @@ package com.wiredcraft.wcapi.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wiredcraft.wcapi.exception.UserRegistrationException;
 import com.wiredcraft.wcapi.model.User;
+import com.wiredcraft.wcapi.service.FollowService;
 import com.wiredcraft.wcapi.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.oauth2.client.servlet.OAuth2ClientAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.servlet.OAuth2ResourceServerAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
@@ -18,10 +18,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -30,7 +28,6 @@ import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -51,6 +48,9 @@ public class UserControllerTest {
     @MockBean
     private UserService userService;
 
+    @MockBean
+    private FollowService followService;
+
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -67,7 +67,7 @@ public class UserControllerTest {
     @Test
     void shouldFetchAllUsers() throws Exception {
         Pageable paging = PageRequest.of(0, 3);
-        Page<User> expected = new PageImpl(userList);
+        Page<User> expected = new PageImpl<>(userList);
 
         given(userService.getAllUsers(paging)).willReturn(expected);
 

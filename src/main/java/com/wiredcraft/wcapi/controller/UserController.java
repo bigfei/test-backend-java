@@ -1,6 +1,7 @@
 package com.wiredcraft.wcapi.controller;
 
 import com.wiredcraft.wcapi.model.User;
+import com.wiredcraft.wcapi.service.FollowService;
 import com.wiredcraft.wcapi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,15 +16,19 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    @Autowired
     private UserService userService;
+
+    private FollowService followService;
+
+    public UserController(UserService userService, FollowService followService) {
+        this.userService = userService;
+        this.followService = followService;
+    }
 
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody User user) {
@@ -87,7 +92,54 @@ public class UserController {
     @GetMapping("/profile")
     @PreAuthorize("hasAuthority('SCOPE_profile')")
     public ModelAndView userDetails(OAuth2AuthenticationToken authentication) {
-        return new ModelAndView("profile" , Collections.singletonMap("details", authentication.getPrincipal().getAttributes()));
+        return new ModelAndView("profile", Collections.singletonMap("details", authentication.getPrincipal().getAttributes()));
     }
 
+    @GetMapping("{id}/followers")
+    public ResponseEntity<List<User>> followers(@PathVariable("id") String userId) {
+        Optional<User> user = userService.getUserById(userId);
+        if (user.isPresent()) {
+            List<User> followers = followService.findFollowersByFollowee(user.get());
+            return new ResponseEntity<>(followers, HttpStatus.OK);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("{id}/following")
+    public ResponseEntity<List<User>> following(@PathVariable("id") String userId) {
+        Optional<User> user = userService.getUserById(userId);
+        if (user.isPresent()) {
+            List<User> followees = followService.findFolloweesByFollower(user.get());
+            return new ResponseEntity<>(followees, HttpStatus.OK);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("{id}/following/{target}")
+    public ResponseEntity<?> unfollow(@PathVariable("id") String userId, @PathVariable("target") String targetUserId) {
+        Optional<User> src = userService.getUserById(userId);
+        Optional<User> target = userService.getUserById(targetUserId);
+        if (src.isPresent() && target.isPresent()) {
+            boolean res = followService.unfollow(src.get(), target.get());
+            if (res) {
+                return ResponseEntity.ok().body("success");
+            }
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping("{id}/following/{target}")
+    public ResponseEntity<?> follow(@PathVariable("id") String userId, @PathVariable("target") String targetUserId) {
+        Optional<User> src = userService.getUserById(userId);
+        Optional<User> target = userService.getUserById(targetUserId);
+        if (src.isPresent() && target.isPresent()) {
+            boolean res = followService.follows(src.get(), target.get());
+            if (res) {
+                return ResponseEntity.ok().body("success");
+            }
+        }
+        return ResponseEntity.notFound().build();
+    }
 }

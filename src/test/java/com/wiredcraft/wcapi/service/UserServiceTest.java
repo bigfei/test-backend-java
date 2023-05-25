@@ -73,16 +73,15 @@ public class UserServiceTest {
         verify(userRepository).save(any(User.class));
     }
 
-
     @Test
     void shouldReturnFindAll() {
-        List<User> users = new ArrayList();
+        List<User> users = new ArrayList<>();
         users.add(new User("Tom", LocalDate.now(), "ADDR1", "T1"));
         users.add(new User("James", LocalDate.now(), "ADDR2", "T2"));
         users.add(new User("Lisa", LocalDate.now(), "ADDR3", "T3"));
 
         Pageable paging = PageRequest.of(0, 10);
-        Page<User> expected = new PageImpl(users);
+        Page<User> expected = new PageImpl<>(users);
 
         given(userRepository.findAll(paging)).willReturn(expected);
         Page<User> actual = userService.getAllUsers(paging);
