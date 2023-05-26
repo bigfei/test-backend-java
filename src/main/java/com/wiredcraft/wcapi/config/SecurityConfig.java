@@ -39,7 +39,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests((authz) -> authz
-                        .requestMatchers("/", "/index.html", "*.ico", "*.css", "*.js", "/users/me").permitAll()
+                        .requestMatchers("/", "/index.html", "*.ico", "*.css", "*.js").permitAll()
                         .anyRequest().authenticated())
                 .oauth2Login(withDefaults())
                 .oauth2ResourceServer((oauth2) -> oauth2.jwt(withDefaults()))

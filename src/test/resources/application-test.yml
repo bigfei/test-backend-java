@@ -1,5 +1,5 @@
-#spring:
-#  data:
-#    mongodb:
-#      uri: mongodb+srv://appuser:ozRKmRQMqqKi3wOq@ubs.mosbfr9.mongodb.net/appdb?retryWrites=true&w=majority
-#      auto-index-creation: true
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://appuser:ozRKmRQMqqKi3wOq@ubs.mosbfr9.mongodb.net/appdb?retryWrites=true&w=majority
+      auto-index-creation: true

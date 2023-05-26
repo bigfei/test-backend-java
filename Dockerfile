@@ -4,7 +4,7 @@ COPY .mvn/ .mvn
 COPY mvnw pom.xml ./
 RUN ./mvnw dependency:go-offline
 COPY ./src ./src
-RUN ./mvnw clean install
+RUN ./mvnw -Dmaven.test.skip=true clean package
 
 FROM eclipse-temurin:17-jre-jammy
 WORKDIR /opt/app
