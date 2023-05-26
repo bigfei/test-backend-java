@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void syncAuth0User(OAuth2User user) {
         String name = (String) user.getAttributes().get("name");
-        Optional<User> userOptional = userRepository.findByName(user.getName());
+        Optional<User> userOptional = userRepository.findByName(name);
         if (userOptional.isPresent()) {
             //syncUser from auth0
             User localUser = userOptional.get();

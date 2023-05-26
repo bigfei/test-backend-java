@@ -7,6 +7,10 @@ services:
     restart: always
     image: bigfei/wc-api
     container_name: wc-api
+    environment:
+      OKTA_OAUTH2_ISSUER: https://dev-wc-1.jp.auth0.com/
+      OKTA_OAUTH2_CLIENT_ID: 7GH8oauy7bbsR6Dcd6zhHTbDNN9oqoqp
+      OKTA_OAUTH2_CLIENT_SECRET: GZY__6pxqrK_TBpXOhFvHhJCABWIsof60MZWEGopbH3rYkbBzCOZTKP_ONztTsWO
     ports:
       - 8080:8080
 

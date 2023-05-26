@@ -91,6 +91,7 @@ APIs:
 - [ ] Sentry APM integration.
 - [ ] Github Actions CI.
 - [ ] Swagger API docs.
+- [ ] Put secrets into .env file for safety.
 
 ### Caveats
 1. Use Mongodb match/in pipelines for checking a user friends list rather than naive recursive searching.
