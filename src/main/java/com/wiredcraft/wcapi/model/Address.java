@@ -1,7 +1,6 @@
 package com.wiredcraft.wcapi.model;
 
 
-import com.mongodb.client.model.geojson.Point;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
 

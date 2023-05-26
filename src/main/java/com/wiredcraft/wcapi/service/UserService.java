@@ -4,7 +4,6 @@ import com.wiredcraft.wcapi.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.geo.Distance;
-import org.springframework.data.geo.Point;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.List;

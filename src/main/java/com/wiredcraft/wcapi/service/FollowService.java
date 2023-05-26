@@ -1,7 +1,6 @@
 package com.wiredcraft.wcapi.service;
 
 import com.wiredcraft.wcapi.model.User;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 

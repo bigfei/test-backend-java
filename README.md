@@ -39,15 +39,15 @@ Or if you want just to feel the app, visit `https://wc-api.bigfei.me`.
 
 ### User Restful API
 
-| Methood | Endpoints      | Usage                                      |
-|---------|----------------|--------------------------------------------|
-| POST    | /users         | create a User                              |
-| GET     | /users         | list Users                                 |
-| GET     | /users/{id}    | list single User                           |
-| PUT     | /users/{id}    | update a User                              |
-| DELETE  | /users/{id}    | delete a User                              |
-| GET     | /users/profile | show a profile page for current logon user |
-| GET     | /users/me      | show user details for current user         |
+| Method | Endpoints      | Usage                                      |
+|--------|----------------|--------------------------------------------|
+| POST   | /users         | create a User                              |
+| GET    | /users         | list Users                                 |
+| GET    | /users/{id}    | list single User                           |
+| PUT    | /users/{id}    | update a User                              |
+| DELETE | /users/{id}    | delete a User                              |
+| GET    | /users/profile | show a profile page for current logon user |
+| GET    | /users/me      | show user details for current user         |
 
 ### OAuth2
 Use auth0.com as the backend oauth provider and okta-spring-boot-starter for springboot supports.
@@ -66,12 +66,12 @@ for mapping the reference relationship.
 
 APIs:
 
-| Methood | Endpoints                      | Usage                                                       |
-|---------|--------------------------------|-------------------------------------------------------------|
-| GET     | /users/{id}/followers          | a list of users who are followers of the specified user ID. |
-| GET     | /users/{id}/following          | a list of users the specified user ID is following          |
-| POST    | /users/{id}/following/{target} | let a user to follow another user                           |
-| DELETE  | /users/{id}/following/{target} | let a user to unfollow another user                         |
+| Method | Endpoints                      | Usage                                                       |
+|--------|--------------------------------|-------------------------------------------------------------|
+| GET    | /users/{id}/followers          | a list of users who are followers of the specified user ID. |
+| GET    | /users/{id}/following          | a list of users the specified user ID is following          |
+| POST   | /users/{id}/following/{target} | let a user to follow another user                           |
+| DELETE | /users/{id}/following/{target} | let a user to unfollow another user                         |
 
 ### Near me
 Use mongodb geospatial search to do geo search around a specific geo points (aka geocaches).
@@ -80,9 +80,9 @@ Use mongodb geospatial search to do geo search around a specific geo points (aka
 
 APIs: 
 
-| Methood | Endpoints                             | Usage                                                             |
-|---------|---------------------------------------|-------------------------------------------------------------------|
-| GET     | /users/{id}/nearFriends?distanceKm=10 | a list of friends within a distance of 10 kilometers from userId. |
+| Method | Endpoints                             | Usage                                                             |
+|--------|---------------------------------------|-------------------------------------------------------------------|
+| GET    | /users/{id}/nearFriends?distanceKm=10 | a list of friends within a distance of 10 kilometers from userId. |
 
 
 ## Todos and Caveats
