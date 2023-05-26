@@ -1,11 +1,13 @@
-FROM eclipse-temurin:17 AS BUILD
-COPY . /app/
-WORKDIR /app/
-RUN ./mvnw clean test package -Pproduction
-RUN ls -la /app/target
+FROM eclipse-temurin:17-jdk-jammy as builder
+WORKDIR /opt/app
+COPY .mvn/ .mvn
+COPY mvnw pom.xml ./
+RUN ./mvnw dependency:go-offline
+COPY ./src ./src
+RUN ./mvnw clean install
 
-FROM eclipse-temurin:17
-COPY --from=BUILD /app/target/wc-api-0.0.1-SNAPSHOT /app/
-WORKDIR /app/
+FROM eclipse-temurin:17-jre-jammy
+WORKDIR /opt/app
 EXPOSE 8080
-ENTRYPOINT java -jar wc-api-0.0.1-SNAPSHOT 8080
+COPY --from=builder /opt/app/target/*.jar /opt/app/*.jar
+ENTRYPOINT ["java", "-jar", "/opt/app/*.jar" ]

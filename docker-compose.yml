@@ -18,7 +18,7 @@ services:
     volumes:
       - mongo:/data/db
       - configdb:/data/configdb
-      - ./init:/docker-entrypoint-initdb.d
+      - ./src/test/resources/mongo:/docker-entrypoint-initdb.d
     environment:
       MONGO_INITDB_ROOT_USERNAME: mongoAdmin
       MONGO_INITDB_ROOT_PASSWORD: mongoAdmin
