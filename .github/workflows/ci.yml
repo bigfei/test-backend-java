@@ -33,7 +33,7 @@ jobs:
           else
             TAGS=`echo ${IMAGE}:latest --tag ${IMAGE}:${GITHUB_REF_NAME}`
           fi
-          echo "{TAGS}=${TAGS}" >> $GITHUB_OUTPUT
+          echo "TAGS=${TAGS}" >> $GITHUB_OUTPUT
 
       - name: Build and push
         run: >-
