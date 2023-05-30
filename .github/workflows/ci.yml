@@ -28,7 +28,7 @@ jobs:
         id: tag
         run: |
           IMAGE=${{ secrets.DOCKER_HUB_USERNAME }}/wc-api
-          if [ -z "${GITHUB_REF_NAME}" ]; then
+          if [ -z "${GITHUB_REF_NAME}" ] || [ "${GITHUB_REF_NAME}" = "master" ]; then
             TAGS="${IMAGE}:latest"
           else
             TAGS=`echo ${IMAGE}:latest --tag ${IMAGE}:${GITHUB_REF_NAME}`
