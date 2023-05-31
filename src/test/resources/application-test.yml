@@ -1,5 +1,16 @@
 spring:
   data:
     mongodb:
-      uri: mongodb+srv://appuser:ozRKmRQMqqKi3wOq@ubs.mosbfr9.mongodb.net/appdb?retryWrites=true&w=majority
+      host: localhost
+      port: 27018
+      username: appuser
+      password: appuser
+      authentication-database: appdb
+      database: appdb
       auto-index-creation: true
+
+de:
+  flapdoodle:
+    mongodb:
+      embedded:
+        version: 4.4.19

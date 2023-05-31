@@ -89,7 +89,7 @@ APIs:
 
 ### Backlog
 - [ ] Sentry APM integration.
-- [ ] Github Actions CI.
+- [x] Github Actions CI.
 - [ ] Swagger API docs.
 - [ ] Put secrets into .env file for safety.
 
