@@ -1,0 +1,21 @@
+version: 2
+updates:
+  - package-ecosystem: maven
+    directory: "/"
+    schedule:
+      interval: daily
+      time: "15:35"
+      timezone: "Asia/Shanghai"
+    open-pull-requests-limit: 10
+    labels:
+      - dependencies
+
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: daily
+      time: "14:35"
+      timezone: "Asia/Shanghai"
+    open-pull-requests-limit: 10
+    labels:
+      - dependencies
