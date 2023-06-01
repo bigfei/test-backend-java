@@ -1,6 +1,5 @@
 # Wiredcraft Back-end Developer Test
-
-[![codecov](https://codecov.io/gh/bigfei/test-backend-java/branch/master/graph/badge.svg?token=YACNVNL1OB)](https://codecov.io/gh/bigfei/test-backend-java)
+[![Codecov branch](https://img.shields.io/codecov/c/github/bigfei/test-backend-java/master?token=YACNVNL1OB)](https://codecov.io/gh/bigfei/test-backend-java)
 
 ## Introduction
 It is a simple LBS service that offers nearby searches, following/followers lists, 
