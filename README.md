@@ -1,4 +1,5 @@
 # Wiredcraft Back-end Developer Test
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/bigfei/test-backend-java/docker-release.yml)
 [![Codecov branch](https://img.shields.io/codecov/c/github/bigfei/test-backend-java/master?token=YACNVNL1OB)](https://codecov.io/gh/bigfei/test-backend-java)
 
 ## Introduction
