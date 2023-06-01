@@ -24,6 +24,18 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: 'maven'
+      - name: Cache embedded mongo
+        id: cache-mongo
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-mongo
+        with:
+          path: ~/.embedmongo
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/application-test.yml') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
       - name: Build with Maven
         run: mvn -B package --file pom.xml
       - name: Submit Dependency Snapshot
