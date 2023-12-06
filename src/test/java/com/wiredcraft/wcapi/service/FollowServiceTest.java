@@ -41,7 +41,7 @@ public class FollowServiceTest {
         given(followRepository.findFollowByFolloweeAndFollower(u0, u1)).willReturn(Optional.empty());
         given(followRepository.save(follow)).willAnswer(invocation -> invocation.getArgument(0));
 
-        boolean res = followService.follows(u0, u1);
+        boolean res = followService.follow(u0, u1);
         assertThat(res).isTrue();
         verify(followRepository).save(any(Follow.class));
     }

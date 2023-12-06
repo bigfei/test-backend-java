@@ -18,6 +18,7 @@ public class LogoutController implements LogoutSuccessHandler {
     private SecurityConfig config;
 
     @Override
+    // see https://auth0.com/docs/logout/guides/logout-auth0#log-out-of-your-application
     public void onLogoutSuccess(HttpServletRequest req, HttpServletResponse res, Authentication authentication) throws IOException, ServletException {
         if (req.getSession() != null) {
             req.getSession().invalidate();

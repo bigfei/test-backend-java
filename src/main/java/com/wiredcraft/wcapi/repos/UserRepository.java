@@ -14,6 +14,5 @@ public interface UserRepository extends MongoRepository<User, String> {
     Optional<User> findByName(String name);
     Page<User> findByName(String name, Pageable pageable);
     User deleteByName(String name);
-
     List<User> findByAddress_LocationNear(Point location, Distance distance);
 }

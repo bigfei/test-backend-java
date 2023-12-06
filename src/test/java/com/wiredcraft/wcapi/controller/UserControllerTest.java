@@ -65,6 +65,10 @@ public class UserControllerTest {
         this.userList.add(new User("Peter", LocalDate.now(), new Address("ADDR3"), "T3"));
     }
 
+    /**
+     * This test case is to test the scenario when all users are found.
+     * @throws Exception exception thrown
+     */
     @Test
     void shouldFetchAllUsers() throws Exception {
         Pageable paging = PageRequest.of(0, 3);
@@ -75,8 +79,13 @@ public class UserControllerTest {
         this.mockMvc.perform(get("/users")).andExpect(status().isOk()).andExpect(jsonPath("$.data.size()", is(userList.size())));
     }
 
+    /**
+     * This test case is to test the scenario when the user is found by the given id.
+     * @throws Exception exception thrown
+     */
     @Test
     void shouldFetchOneUserById() throws Exception {
+
         final String userId = "11a";
         final User user = new User("Tom", LocalDate.now(), new Address("ADDR1"), "T1");
 
@@ -85,6 +94,10 @@ public class UserControllerTest {
         this.mockMvc.perform(get("/users/{id}", userId)).andExpect(status().isOk()).andExpect(jsonPath("$.name", is(user.getName())));
     }
 
+    /**
+     * This test case is to test the scenario when the user is not found by the given id.
+     * @throws Exception exception
+     */
     @Test
     void shouldReturn404WhenFindUserById() throws Exception {
         final String userId = "11a";

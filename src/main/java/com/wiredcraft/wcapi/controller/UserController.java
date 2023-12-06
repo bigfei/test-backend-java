@@ -37,6 +37,12 @@ public class UserController {
         return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }
 
+    /**
+     * Get all users
+     * @param page page number
+     * @param size page size
+     * @return list of users
+     */
     @GetMapping
     public ResponseEntity<Map<String, Object>> getAllUsers(
             @RequestParam(defaultValue = "0") int page,
@@ -53,6 +59,11 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /**
+     * Get a user by id
+     * @param id user id
+     * @return user
+     */
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable String id) {
         return userService.getUserById(id)
@@ -60,6 +71,11 @@ public class UserController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    /**
+     * Get current user
+     * @param user oauth2 user
+     * @return user
+     */
     @GetMapping("/me")
     public ResponseEntity<?> getUser(@AuthenticationPrincipal OAuth2User user) {
         if (user == null) {
@@ -69,6 +85,12 @@ public class UserController {
         }
     }
 
+    /**
+     * Update a user
+     * @param userId user id
+     * @param user user
+     * @return user
+     */
     @PutMapping("{id}")
     public ResponseEntity<User> updateUser(@PathVariable("id") String userId,
                                            @RequestBody User user) {
@@ -96,6 +118,11 @@ public class UserController {
         return new ModelAndView("profile", Collections.singletonMap("details", authentication.getPrincipal().getAttributes()));
     }
 
+    /**
+     * Get followers of a user
+     * @param userId user id
+     * @return list of followers
+     */
     @GetMapping("{id}/followers")
     public ResponseEntity<List<User>> followers(@PathVariable("id") String userId) {
         Optional<User> user = userService.getUserById(userId);
@@ -107,6 +134,11 @@ public class UserController {
         }
     }
 
+    /**
+     * Get followees of a user
+     * @param userId user id
+     * @return list of followees
+     */
     @GetMapping("{id}/following")
     public ResponseEntity<List<User>> following(@PathVariable("id") String userId) {
         Optional<User> user = userService.getUserById(userId);
@@ -118,6 +150,12 @@ public class UserController {
         }
     }
 
+    /**
+     * Unfollow a user
+     * @param userId user id
+     * @param targetUserId target user id
+     * @return success or not
+     */
     @DeleteMapping("{id}/following/{target}")
     public ResponseEntity<?> unfollow(@PathVariable("id") String userId, @PathVariable("target") String targetUserId) {
         Optional<User> src = userService.getUserById(userId);
@@ -131,12 +169,18 @@ public class UserController {
         return ResponseEntity.notFound().build();
     }
 
+    /**
+     * Follow a user
+     * @param userId user id
+     * @param targetUserId  target user id
+     * @return success or not
+     */
     @PostMapping("{id}/following/{target}")
     public ResponseEntity<?> follow(@PathVariable("id") String userId, @PathVariable("target") String targetUserId) {
         Optional<User> src = userService.getUserById(userId);
         Optional<User> target = userService.getUserById(targetUserId);
         if (src.isPresent() && target.isPresent()) {
-            boolean res = followService.follows(src.get(), target.get());
+            boolean res = followService.follow(src.get(), target.get());
             if (res) {
                 return ResponseEntity.ok().body("success");
             }
@@ -144,6 +188,12 @@ public class UserController {
         return ResponseEntity.notFound().build();
     }
 
+    /**
+     *  Get users who are within the distance of the user in km
+     * @param userId user id
+     * @param distanceKm distance in km
+     * @return list of users who are within the distance of the user in km
+     */
     @GetMapping("{id}/nearFriends")
     public ResponseEntity<List<User>> nearFriends(@PathVariable("id") String userId,
                                                   @RequestParam(defaultValue = "10") int distanceKm) {

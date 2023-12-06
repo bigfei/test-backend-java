@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
     public Page<User> getAllUsers(Pageable paging) {
         return userRepository.findAll(paging);
     }
-
+    
     @Override
     public User updateUser(User user) {
         User existingUser = userRepository.findById(user.getId()).get();
@@ -80,12 +80,19 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    /**
+     * This method is to find the near friends of the given user.
+     *
+     * @param user     the given user
+     * @param distance the distance to find the near friends in km
+     * @return the list of near friends
+     */
     public List<User> findByNearFriends(User user, Distance distance) {
         List<User> users = new ArrayList<>();
         List<User> nearUsers = userRepository.findByAddress_LocationNear(user.getAddress().getLocation(), distance);
         for (User nearUser : nearUsers) {
             List<Follow> fs = followRepository.friendFollows(user.getId(), nearUser.getId());
-            if (fs.size() == 2) { // they are followed each other
+            if (fs.size() == 2) { // if the fs size is 2, it means the two users are friends of each other
                 users.add(nearUser);
             }
         }

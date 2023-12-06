@@ -28,6 +28,10 @@ public class AuthController {
         this.userService = userService;
     }
 
+    /**
+     * Redirect to login page
+     * @return redirect url
+     */
     @GetMapping("/")
     public String home(@AuthenticationPrincipal OAuth2User user) {
         if (user != null) {

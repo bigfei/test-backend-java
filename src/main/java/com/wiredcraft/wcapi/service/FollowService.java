@@ -8,6 +8,6 @@ public interface FollowService {
     List<User> findFollowersByFollowee(User followee);
     List<User> findFolloweesByFollower(User follower);
 
-    boolean follows(User src, User target);
+    boolean follow(User src, User target);
     boolean unfollow(User src, User target);
 }
