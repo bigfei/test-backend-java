@@ -18,6 +18,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      - name: Install libssl1.1
+        run: sudo apt-get update && sudo apt-get install -y libssl1.1
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
